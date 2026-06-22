@@ -1,5 +1,3 @@
-# To run, use: python "Python Scripts/baseball_project_data_fetcher.py" and press enter
-
 import time
 import os
 import glob
@@ -19,14 +17,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import StaleElementReferenceException, ElementClickInterceptedException, TimeoutException
 from webdriver_manager.chrome import ChromeDriverManager
 
-# --- 1. CONFIGURATION: FOLDERS ---
-PROJECT_DIR = r"/Users/yosefukraincik/Library/CloudStorage/OneDrive-Personal/Desktop/Fantasy Baseball Project"
-DOWNLOAD_DIR = os.path.join(PROJECT_DIR, "Raw_Project_CSVs")
-PROFILE_DIR = os.path.join(PROJECT_DIR, "Python Scripts", "Bot_Profile")
-
+# --- 1. CONFIGURATION: FOLDERS (CLOUD VERSION) ---
+# We use the current working directory of the GitHub Linux server instead of your Mac's hard drive
+DOWNLOAD_DIR = os.path.join(os.getcwd(), "data")
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
-# --- 2. CONFIGURATION: YOUR LINKS ---
+# --- 2. CONFIGURATION: YOUR EXACT LINKS ---
 URLS_TO_DOWNLOAD = {
     "FanGraphs Hitter Data": "https://www.fangraphs.com/leaders/major-league?pos=all&stats=bat&lg=all&season=2026&season1=2026&ind=0&v_cr=202301&qual=1&type=c%2C0%2C1%2C2%2C3%2C4%2C5%2C6%2C7%2C8%2C9%2C10%2C11%2C12%2C13%2C14%2C15%2C16%2C17%2C18%2C19%2C20%2C21%2C22%2C23%2C24%2C25%2C26%2C27%2C28%2C29%2C30%2C31%2C32%2C33%2C34%2C35%2C36%2C37%2C38%2C39%2C40%2C41%2C42%2C43%2C44%2C45%2C46%2C47%2C48%2C49%2C50%2C51%2C52%2C53%2C54%2C55%2C56%2C57%2C58%2C59%2C60%2C61%2C62%2C65%2C66%2C67%2C68%2C69%2C70%2C71%2C73%2C74%2C75%2C76%2C77%2C78%2C79%2C80%2C81%2C82%2C83%2C84%2C85%2C86%2C87%2C88%2C89%2C90%2C91%2C92%2C93%2C94%2C95%2C96%2C97%2C98%2C99%2C100%2C101%2C102%2C103%2C104%2C105%2C106%2C107%2C108%2C109%2C110%2C111%2C112%2C113%2C114%2C115%2C116%2C117%2C118%2C119%2C120%2C121%2C122%2C123%2C124%2C125%2C126%2C127%2C128%2C129%2C130%2C131%2C132%2C133%2C134%2C135%2C136%2C137%2C138%2C139%2C140%2C141%2C142%2C143%2C144%2C145%2C146%2C147%2C148%2C149%2C150%2C151%2C152%2C153%2C154%2C155%2C156%2C157%2C158%2C159%2C160%2C161%2C162%2C163%2C164%2C165%2C166%2C167%2C168%2C169%2C170%2C171%2C172%2C173%2C174%2C175%2C176%2C177%2C178%2C179%2C180%2C181%2C182%2C183%2C184%2C185%2C186%2C187%2C188%2C189%2C190%2C191%2C192%2C193%2C194%2C195%2C196%2C197%2C198%2C199%2C200%2C201%2C202%2C203%2C204%2C205%2C206%2C207%2C208%2C209%2C210%2C211%2C212%2C213%2C214%2C215%2C216%2C217%2C218%2C219%2C220%2C221%2C222%2C223%2C224%2C225%2C226%2C227%2C228%2C229%2C230%2C231%2C232%2C233%2C234%2C235%2C236%2C237%2C238%2C239%2C240%2C241%2C242%2C243%2C244%2C245%2C246%2C247%2C248%2C249%2C250%2C251%2C252%2C253%2C254%2C255%2C256%2C257%2C258%2C259%2C260%2C261%2C262%2C263%2C264%2C265%2C266%2C267%2C268%2C269%2C270%2C271%2C272%2C273%2C274%2C275%2C276%2C277%2C278%2C279%2C280%2C281%2C282%2C283%2C284%2C285%2C286%2C287%2C288%2C289%2C290%2C291%2C292%2C293%2C294%2C295%2C296%2C297%2C298%2C299%2C300%2C301%2C302%2C303%2C304%2C305%2C306%2C307%2C308%2C309%2C310%2C311%2C312%2C313%2C314%2C315%2C316%2C317%2C318%2C319%2C320%2C321%2C322%2C323%2C324%2C325%2C326%2C327%2C328%2C329%2C330%2C331%2C332%2C333%2C334%2C335%2C336%2C337%2C338%2C339%2C340%2C341%2C342%2C343%2C344%2C345%2C346%2C347%2C348%2C349%2C350%2C351%2C352%2C353%2C354%2C355%2C356%2C357%2C358%2C359%2C360%2C361%2C362%2C363%2C364%2C365%2C366%2C367%2C368%2C369%2C370%2C371%2C372%2C373%2C374%2C375%2C376%2C377%2C378%2C379%2C380%2C381%2C382%2C383%2C384%2C385%2C386%2C387%2C388%2C389%2C390%2C391%2C392%2C393%2C394%2C395%2C396%2C397%2C398%2C399%2C400%2C401%2C402%2C403%2C404%2C405%2C406%2C407%2C408%2C409%2C410%2C411%2C412%2C413%2C414%2C415%2C416%2C417%2C418%2C419%2C420%2C421%2C422%2C423%2C424%2C425%2C426%2C427%2C428%2C429%2C430%2C431%2C432%2C433%2C434%2C435%2C436%2C437%2C438%2C439%2C440%2C441%2C442%2C443%2C444%2C445%2C446%2C447%2C448%2C449%2C450%2C451%2C452%2C453%2C454%2C455%2C456%2C457%2C458&month=0",
     "FanGraphs Pitcher Data": "https://www.fangraphs.com/leaders/major-league?pos=all&stats=pit&lg=all&type=c%2C-1%2C0%2C1%2C2%2C3%2C4%2C5%2C6%2C7%2C8%2C9%2C10%2C11%2C12%2C13%2C14%2C15%2C16%2C17%2C18%2C19%2C20%2C21%2C22%2C23%2C24%2C25%2C26%2C27%2C28%2C29%2C30%2C31%2C32%2C33%2C34%2C35%2C36%2C37%2C38%2C39%2C40%2C41%2C42%2C43%2C44%2C45%2C46%2C47%2C48%2C49%2C50%2C51%2C52%2C53%2C54%2C55%2C56%2C57%2C58%2C59%2C60%2C61%2C62%2C63%2C64%2C65%2C66%2C67%2C68%2C69%2C70%2C71%2C72%2C73%2C74%2C75%2C76%2C77%2C78%2C79%2C80%2C81%2C82%2C83%2C84%2C85%2C86%2C87%2C88%2C89%2C90%2C91%2C92%2C93%2C94%2C95%2C96%2C97%2C98%2C99%2C100%2C101%2C102%2C103%2C104%2C105%2C106%2C107%2C108%2C109%2C110%2C111%2C112%2C113%2C114%2C115%2C116%2C117%2C118%2C119%2C120%2C121%2C122%2C123%2C124%2C125%2C126%2C127%2C128%2C129%2C130%2C131%2C132%2C133%2C134%2C135%2C136%2C137%2C138%2C139%2C140%2C141%2C142%2C143%2C144%2C145%2C146%2C147%2C148%2C149%2C150%2C151%2C152%2C153%2C154%2C155%2C156%2C157%2C158%2C159%2C160%2C161%2C162%2C163%2C164%2C165%2C166%2C167%2C168%2C169%2C170%2C171%2C172%2C173%2C174%2C175%2C176%2C177%2C178%2C179%2C180%2C181%2C182%2C183%2C184%2C185%2C186%2C187%2C188%2C189%2C190%2C191%2C192%2C193%2C194%2C195%2C196%2C197%2C198%2C199%2C200%2C201%2C202%2C203%2C204%2C205%2C206%2C207%2C208%2C209%2C210%2C211%2C212%2C213%2C214%2C215%2C216%2C217%2C218%2C219%2C220%2C221%2C222%2C223%2C224%2C225%2C226%2C227%2C228%2C229%2C230%2C231%2C232%2C233%2C234%2C235%2C236%2C237%2C238%2C239%2C240%2C241%2C242%2C243%2C244%2C245%2C246%2C247%2C248%2C249%2C250%2C251%2C252%2C253%2C254%2C255%2C256%2C257%2C258%2C259%2C260%2C261%2C262%2C263%2C264%2C265%2C266%2C267%2C268%2C269%2C270%2C271%2C272%2C273%2C274%2C275%2C276%2C277%2C278%2C279%2C280%2C281%2C282%2C283%2C284%2C285%2C286%2C287%2C288%2C289%2C290%2C291%2C292%2C293%2C294%2C295%2C296%2C297%2C298%2C299%2C300%2C301%2C302%2C303%2C304%2C305%2C306%2C307%2C308%2C309%2C310%2C311%2C312%2C313%2C314%2C315%2C316%2C317%2C319%2C319%2C320%2C321%2C322%2C323%2C324%2C325%2C326%2C327%2C328%2C329%2C330%2C331%2C332%2C333%2C334%2C335%2C336%2C337%2C338%2C339%2C340%2C341%2C342%2C343%2C344%2C345%2C346%2C347%2C348%2C349%2C350%2C351%2C352%2C353%2C354%2C355%2C356%2C357%2C358%2C359%2C360%2C361%2C362%2C363%2C364%2C365%2C366%2C367%2C368%2C369%2C370%2C371%2C372%2C373%2C374%2C375%2C376%2C377%2C378%2C379%2C380%2C381%2C382%2C383%2C384%2C385%2C386%2C387%2C388%2C389%2C390%2C391%2C392%2C393%2C394%2C395%2C396%2C397%2C398%2C399%2C400%2C401%2C402%2C403%2C404%2C405%2C406%2C407%2C408%2C409%2C410%2C411%2C412%2C413%2C414%2C415%2C416%2C417%2C418%2C419%2C420%2C421%2C422%2C423%2C424%2C425%2C426%2C427%2C428%2C429%2C430%2C431%2C432%2C433%2C434%2C435%2C436%2C437%2C438%2C439%2C440%2C441%2C442%2C443%2C444%2C445%2C446%2C447%2C448%2C449%2C450%2C451%2C452%2C453%2C454%2C455%2C456%2C457%2C458%2C459%2C460%2C461%2C462%2C463%2C464%2C465%2C466%2C467%2C468%2C469%2C470%2C471%2C472%2C473%2C474%2C475%2C476%2C477%2C478%2C479%2C480%2C481%2C482%2C483%2C484%2C485%2C486%2C487%2C488%2C489%2C490%2C491%2C492%2C493%2C494%2C495%2C496%2C497%2C498%2C499%2C500%2C501%2C502%2C503%2C504%2C505%2C506%2C507%2C508%2C509%2C510%2C511%2C512%2C513%2C514%2C515%2C516%2C517%2C518%2C519%2C520%2C521%2C522%2C523%2C524%2C525%2C526%2C527%2C528%2C529%2C530%2C531&season=2026&month=0&season1=2026&ind=0&v_cr=202301&pageitems=2000000000&qual=0",
@@ -46,7 +42,12 @@ YAHOO_HEADERS = {
 }
 
 def setup_driver():
+    # Configure Chrome to run invisibly (headless) for GitHub Actions
     chrome_options = Options()
+    chrome_options.add_argument("--headless=new") 
+    chrome_options.add_argument("--no-sandbox") 
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--window-size=1920,1080")
     
     prefs = {
         "download.default_directory": DOWNLOAD_DIR,
@@ -55,42 +56,42 @@ def setup_driver():
         "safebrowsing.enabled": True
     }
     chrome_options.add_experimental_option("prefs", prefs)
-    chrome_options.add_argument(f"--user-data-dir={PROFILE_DIR}")
     
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
-    driver.maximize_window()
     return driver
 
-def check_login_and_wait(driver):
-    print("Checking FanGraphs authentication...")
-    driver.get("https://www.fangraphs.com")
-    time.sleep(3) 
+def inject_fangraphs_cookie(driver):
+    """Pulls the secret cookie from GitHub and injects it into the browser."""
+    raw_cookie = os.environ.get("FANGRAPHS_COOKIE")
     
-    try:
-        driver.find_element(By.XPATH, "//a[contains(text(), 'Log In') or contains(text(), 'Login')]")
-        is_logged_in = False
-    except Exception:
-        is_logged_in = True
+    if not raw_cookie:
+        print("WARNING: FANGRAPHS_COOKIE secret not found in environment!")
+        return
 
-    if not is_logged_in:
-        print("\n" + "="*50)
-        print("ACTION REQUIRED: You are not logged into FanGraphs!")
-        print("1. Go to the newly opened Chrome browser window.")
-        print("2. Manually click 'Log In' and enter your credentials.")
-        print("3. Check the 'Remember Me' box if it exists.")
-        print("4. Once you are successfully logged in, come back here.")
-        print("="*50 + "\n")
-        input("Press ENTER right here in the terminal AFTER you are logged in...")
-        print("\nSession saved! Resuming downloads...\n")
-    else:
-        print("You are already logged in! Proceeding with downloads...")
+    print("Injecting FanGraphs authentication cookies...")
+    
+    # Must hit the domain once before injecting cookies
+    driver.get("https://www.fangraphs.com/404")
+    time.sleep(2)
+    
+    # Split the big cookie string into individual parts for Selenium
+    cookies = raw_cookie.split(';')
+    for cookie in cookies:
+        if '=' in cookie:
+            name, value = cookie.strip().split('=', 1)
+            driver.add_cookie({
+                'name': name,
+                'value': value,
+                'domain': '.fangraphs.com'
+            })
+    
+    print("Authentication successful. Proceeding to custom dashboards.")
 
 def wait_for_new_download(folder, existing_files_before_click, timeout=120):
     end_time = time.time() + timeout
     while time.time() < end_time:
         current_files = set(glob.glob(os.path.join(folder, "*.*")))
-        
-        active_downloads = [f for f in current_files if f.endswith(".crdownload")]
+        active_downloads = [f for f in current_files if f.endswith(".crdownload") or f.endswith(".tmp")]
         
         if not active_downloads:
             new_files = current_files - existing_files_before_click
@@ -98,7 +99,6 @@ def wait_for_new_download(folder, existing_files_before_click, timeout=120):
                 if f.endswith(".csv"):
                     time.sleep(2) 
                     return f
-                    
         time.sleep(1)
     return None
 
@@ -113,10 +113,8 @@ def safe_click(driver, xpath, timeout=60):
             time.sleep(1)
             driver.execute_script("arguments[0].click();", element)
             return True
-        except (StaleElementReferenceException, ElementClickInterceptedException):
+        except (StaleElementReferenceException, ElementClickInterceptedException, TimeoutException):
             time.sleep(1)
-            continue
-        except TimeoutException:
             continue
         except Exception:
             time.sleep(1)
@@ -124,7 +122,6 @@ def safe_click(driver, xpath, timeout=60):
     raise Exception(f"Could not find or click the download button after {timeout} seconds.")
 
 def scrape_yahoo_data(pos_code, tab_name):
-    """Unifies your Batter and Pitcher logic into a single dynamic scraper with no Row 1 timestamps."""
     print(f"\nFetching data for: {tab_name} (Yahoo Scraper)...")
     
     all_players_data = []
@@ -181,19 +178,18 @@ def download_and_rename():
         except Exception:
             pass
 
-    # Array to track execution updates for the master registry
     registry = []
 
-    # Phase 1: Fetch Yahoo Data without opening a browser
     scrape_yahoo_data('B', 'Yahoo Batter Data')
     registry.append({'Tab Name': 'Yahoo Batter Data', 'Last Updated': formatted_pull_time})
 
     scrape_yahoo_data('P', 'Yahoo Pitcher Data')
     registry.append({'Tab Name': 'Yahoo Pitcher Data', 'Last Updated': formatted_pull_time})
 
-    # Phase 2: Spin up the browser to grab FanGraphs and Savant
     driver = setup_driver()
-    check_login_and_wait(driver)
+    
+    # Inject the cookie immediately upon opening the browser
+    inject_fangraphs_cookie(driver)
 
     for tab_name, url in URLS_TO_DOWNLOAD.items():
         print(f"\nFetching data for: {tab_name}...")
@@ -202,7 +198,6 @@ def download_and_rename():
         existing_files = set(glob.glob(os.path.join(DOWNLOAD_DIR, "*.*")))
         
         try:
-            # --- FANGRAPHS EXPORT LOGIC ---
             if "fangraphs" in url.lower():
                 fg_xpath = (
                     "//*[contains(@class, 'data-export')] | "
@@ -225,7 +220,6 @@ def download_and_rename():
                 if fg_retries == 3:
                     raise Exception("FanGraphs failed to load data grid after multiple reloads.")
                 
-            # --- SAVANT EXPORT LOGIC ---
             elif "baseballsavant" in url.lower():
                 if "statcast_search" in url.lower():
                     savant_xpath = (
@@ -253,7 +247,6 @@ def download_and_rename():
                 new_file_path = os.path.join(DOWNLOAD_DIR, f"{tab_name}.csv")
                 shutil.move(latest_file, new_file_path)
                 
-                # Document successful update to the registry
                 registry.append({'Tab Name': tab_name, 'Last Updated': formatted_pull_time})
                 print(f"  -> Successfully saved as: {tab_name}.csv")
             else:
@@ -264,15 +257,9 @@ def download_and_rename():
 
     driver.quit()
     
-    # Save the master tracking matrix straight to its own CSV
     df_registry = pd.DataFrame(registry)
     df_registry.to_csv(os.path.join(DOWNLOAD_DIR, "Last_Updated.csv"), index=False)
     print("\n  -> Generated master timestamp file: Last_Updated.csv")
-    
-    print("\n==========================================")
-    print("All downloads complete! Your entire pipeline is ready.")
-    print("Open Excel, go to the 'Data' ribbon, and click 'Refresh All'.")
-    print("==========================================")
 
 if __name__ == "__main__":
     download_and_rename()
