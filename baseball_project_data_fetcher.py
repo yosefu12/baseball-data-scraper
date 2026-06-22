@@ -7,6 +7,7 @@ import re
 import requests
 import pandas as pd
 from datetime import datetime
+import zoneinfo # Added zoneinfo to handle timezone conversion
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -168,7 +169,9 @@ def scrape_yahoo_data(pos_code, tab_name):
         print(f"  -> WARNING: No data was collected for {tab_name}.")
 
 def download_and_rename():
-    pull_time = datetime.now()
+    # Force the server to use Eastern Time
+    tz_ny = zoneinfo.ZoneInfo("America/New_York")
+    pull_time = datetime.now(tz_ny)
     formatted_pull_time = pull_time.strftime("%B %d, %Y at %I:%M%p").replace(' 0', ' ')
 
     print("Clearing out old CSVs from the download folder...")
