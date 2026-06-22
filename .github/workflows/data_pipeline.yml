@@ -2,7 +2,7 @@ name: Baseball Data Scraper
 
 on:
   schedule:
-    - cron: '0 10 * * *' 
+    - cron: '30 20 * * *' 
   workflow_dispatch:
 
 permissions:
@@ -27,7 +27,6 @@ jobs:
           pip install requests pandas beautifulsoup4 lxml selenium webdriver-manager
 
       - name: Run Python Script
-        # This passes the cookie from your secret vault directly into the Python code
         env:
           FANGRAPHS_COOKIE: ${{ secrets.FANGRAPHS_COOKIE }}
         run: python baseball_project_data_fetcher.py
