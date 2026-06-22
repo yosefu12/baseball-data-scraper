@@ -1,0 +1,41 @@
+name: Baseball Data Scraper
+
+# Triggers: Run automatically at 6 AM EST every day, or via a manual button click
+on:
+  schedule:
+    - cron: '0 10 * * *' 
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  scrape-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        # Install the exact packages your script requires
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pandas beautifulsoup4 lxml selenium webdriver-manager
+
+      - name: Run Python Script
+        run: python baseball_project_data_fetcher.py
+
+      - name: Commit and Push Changes
+        # This step takes the CSVs from the 'data' folder and commits them back to your repo
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/*.csv
+          git commit -m "Automated data refresh" || echo "No changes to commit"
+          git push
