@@ -31,10 +31,11 @@ jobs:
           FANGRAPHS_COOKIE: ${{ secrets.FANGRAPHS_COOKIE }}
         run: python baseball_project_data_fetcher.py
 
-      - name: Commit and Push Changes
+      - name: Commit and Push changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global rebase.autoStash true 
           git add data/*.csv
           git commit -m "Automated data refresh" || echo "No changes to commit"
           git pull --rebase -X theirs
