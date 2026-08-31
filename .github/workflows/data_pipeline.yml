@@ -32,6 +32,9 @@ jobs:
         run: python baseball_project_data_fetcher.py
 
       - name: Commit and Push changes
+        # always() so that when one source fails, the sources that DID work
+        # are still committed. The run is still reported as failed overall.
+        if: always()
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
