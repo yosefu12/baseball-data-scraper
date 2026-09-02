@@ -39,6 +39,36 @@ URLS_TO_DOWNLOAD = {
     "Savant Pitching Data_All": "https://baseballsavant.mlb.com/leaderboard/custom?year=2026&type=pitcher&filter=&min=1&selections=player_age%2Cp_game%2Cp_formatted_ip%2Cpa%2Cab%2Chit%2Csingle%2Cdouble%2Ctriple%2Chome_run%2Cstrikeout%2Cwalk%2Ck_percent%2Cbb_percent%2Cbatting_avg%2Cslg_percent%2Con_base_percent%2Con_base_plus_slg%2Cisolated_power%2Cbabip%2Cp_earned_run%2Cp_run%2Cp_save%2Cp_blown_save%2Cp_out%2Cp_win%2Cp_loss%2Cp_wild_pitch%2Cp_balk%2Cp_shutout%2Cp_era%2Cp_opp_batting_avg%2Cp_opp_on_base_avg%2Cp_total_stolen_base%2Cp_pickoff_attempt_1b%2Cp_pickoff_attempt_2b%2Cp_pickoff_attempt_3b%2Cp_pickoff_1b%2Cp_pickoff_2b%2Cp_pickoff_3b%2Cp_lob%2Cp_rbi%2Cp_quality_start%2Cp_walkoff%2Cp_run_support%2Cp_ab_scoring%2Cp_automatic_ball%2Cp_ball%2Cp_called_strike%2Cp_catcher_interf%2Cp_complete_game%2Cp_defensive_indiff%2Cp_foul%2Cp_foul_tip%2Cp_game_finished%2Cp_game_in_relief%2Cp_gnd_into_dp%2Cp_gnd_into_tp%2Cp_hit_by_pitch%2Cp_hit_fly%2Cp_hit_ground%2Cp_hit_line_drive%2Cp_hit_into_play%2Cp_hit_scoring%2Cp_hold%2Cp_intent_ball%2Cp_intent_walk%2Cp_missed_bunt%2Cp_out_fly%2Cp_out_ground%2Cp_out_line_drive%2Cp_passed_ball%2Cp_pitchout%2Cp_relief_no_out%2Cp_sac_bunt%2Cp_sac_fly%2Cp_starting_p%2Cp_swinging_strike%2Cp_unearned_run%2Cp_total_ball%2Cp_total_bases%2Cp_total_caught_stealing%2Cp_total_pickoff%2Cp_total_pickoff_attempt%2Cp_total_pickoff_error%2Cp_total_pitches%2Cp_total_sacrifices%2Cp_total_strike%2Cp_total_swinging_strike%2Cp_inh_runner%2Cp_inh_runner_scored%2Cp_beq_runner%2Cp_beq_runner_scored%2Cp_reached_on_error%2Cxba%2Cxslg%2Cwoba%2Cxwoba%2Cxobp%2Cxiso%2Cwobacon%2Cxwobacon%2Cbacon%2Cxbacon%2Cxbadiff%2Cxslgdiff%2Cwobadiff%2Cavg_swing_speed%2Cfast_swing_rate%2Cblasts_contact%2Cblasts_swing%2Csquared_up_contact%2Csquared_up_swing%2Cavg_swing_length%2Cswords%2Cattack_angle%2Cattack_direction%2Cideal_angle_rate%2Cvertical_swing_path%2Cexit_velocity_avg%2Claunch_angle_avg%2Csweet_spot_percent%2Cbarrel%2Cbarrel_batted_rate%2Csolidcontact_percent%2Cflareburner_percent%2Cpoorlyunder_percent%2Cpoorlytopped_percent%2Cpoorlyweak_percent%2Chard_hit_percent%2Cavg_best_speed%2Cavg_hyper_speed%2Cz_swing_percent%2Cz_swing_miss_percent%2Coz_swing_percent%2Coz_swing_miss_percent%2Coz_contact_percent%2Cout_zone_swing_miss%2Cout_zone_swing%2Cout_zone_percent%2Cout_zone%2Cmeatball_swing_percent%2Cmeatball_percent%2Cpitch_count_offspeed%2Cpitch_count_fastball%2Cpitch_count_breaking%2Cpitch_count%2Ciz_contact_percent%2Cin_zone_swing_miss%2Cin_zone_swing%2Cin_zone_percent%2Cin_zone%2Cedge_percent%2Cedge%2Cwhiff_percent%2Cswing_percent%2Cpull_percent%2Cstraightaway_percent%2Copposite_percent%2Cbatted_ball%2Cf_strike_percent%2Cgroundballs_percent%2Cgroundballs%2Cflyballs_percent%2Cflyballs%2Clinedrives_percent%2Clinedrives%2Cpopups_percent%2Cpopups%2Cpitch_hand%2Cn%2Carm_angle%2Cn_ff_formatted%2Cff_avg_speed%2Cff_avg_spin%2Cff_avg_break_x%2Cff_avg_break_z%2Cff_avg_break_z_induced%2Cff_avg_break%2Cff_range_speed%2Cn_sl_formatted%2Csl_avg_speed%2Csl_avg_spin%2Csl_avg_break_x%2Csl_avg_break_z%2Csl_avg_break_z_induced%2Csl_avg_break%2Csl_range_speed%2Cn_ch_formatted%2Cch_avg_speed%2Cch_avg_spin%2Cch_avg_break_x%2Cch_avg_break_z%2Cch_avg_break_z_induced%2Cch_avg_break%2Cch_range_speed%2Cn_cu_formatted%2Ccu_avg_speed%2Ccu_avg_spin%2Ccu_avg_break_x%2Ccu_avg_break_z%2Ccu_avg_break_z_induced%2Ccu_avg_break%2Ccu_range_speed%2Cn_si_formatted%2Csi_avg_speed%2Csi_avg_spin%2Csi_avg_break_x%2Csi_avg_break_z%2Csi_avg_break_z_induced%2Csi_avg_break%2Csi_range_speed%2Cn_fc_formatted%2Cfc_avg_speed%2Cfc_avg_spin%2Cfc_avg_break_x%2Cfc_avg_break_z%2Cfc_avg_break_z_induced%2Cfc_avg_break%2Cfc_range_speed%2Cn_fs_formatted%2Cfs_avg_speed%2Cfs_avg_spin%2Cfs_avg_break_x%2Cfs_avg_break_z%2Cfs_avg_break_z_induced%2Cfs_avg_break%2Cfs_range_speed%2Cn_kn_formatted%2Ckn_avg_speed%2Ckn_avg_spin%2Ckn_avg_break_x%2Ckn_avg_break_z%2Ckn_avg_break_z_induced%2Ckn_avg_break%2Ckn_range_speed%2Cn_st_formatted%2Cst_avg_speed%2Cst_avg_spin%2Cst_avg_break_x%2Cst_avg_break_z%2Cst_avg_break_z_induced%2Cst_avg_break%2Cst_range_speed%2Cn_sv_formatted%2Csv_avg_speed%2Csv_avg_spin%2Csv_avg_break_x%2Csv_avg_break_z%2Csv_avg_break_z_induced%2Csv_avg_break%2Csv_range_speed%2Cn_fo_formatted%2Cfo_avg_speed%2Cfo_avg_spin%2Cfo_avg_break_x%2Cfo_avg_break_z%2Cfo_avg_break_z_induced%2Cfo_avg_break%2Cfo_range_speed%2Cn_sc_formatted%2Csc_avg_speed%2Csc_avg_spin%2Csc_avg_break_x%2Csc_avg_break_z%2Csc_avg_break_z_induced%2Csc_avg_break%2Csc_range_speed%2Cn_fastball_formatted%2Cfastball_avg_speed%2Cfastball_avg_spin%2Cfastball_avg_break_x%2Cfastball_avg_break_z%2Cfastball_avg_break_z_induced%2Cfastball_avg_break%2Cfastball_range_speed%2Cn_breaking_formatted%2Cbreaking_avg_speed%2Cbreaking_avg_spin%2Cbreaking_avg_break_x%2Cbreaking_avg_break_z%2Cbreaking_avg_break_z_induced%2Cbreaking_avg_break%2Cbreaking_range_speed%2Cn_offspeed_formatted%2Coffspeed_avg_speed%2Coffspeed_avg_spin%2Coffspeed_avg_break_x%2Coffspeed_avg_break_z%2Coffspeed_avg_break_z_induced%2Coffspeed_avg_break%2Coffspeed_range_speed&chart=false&x=player_age&y=player_age&r=no&chartType=beeswarm&sort=xwoba&sortDir=asc"
 }
 
+# --- 2b. FANGRAPHS PITCH-TYPE SPLITS (5 tables x 2 handedness) ---
+# One template drives all ten downloads, so changing the season is a single edit.
+FG_SPLITS_TEMPLATE = (
+    "https://www.fangraphs.com/leaders/pitch-type-splits"
+    "?season=2026&startdate=&enddate=&pitchtype=&position=bat&stands=&throws={hand}"
+    "&pteamids=&bteamids=&pitcherids=&batterids=&pitches=0&groupbylevel=player"
+    "&groupbytime=season&includepitchpct=false&statgroup={statgroup}"
+    "&pageitems=2000000000&pagenum=1&sortstat=default&sortdir=default&sortcol=default"
+)
+
+# statgroup -> table name (verified against the FanGraphs UI)
+FG_SPLIT_TABLES = {
+    3:  "BattedBall",        # Batted Ball & Movement
+    4:  "PlateDiscipline",   # Plate Discipline & Value
+    5:  "Statcast",          # Statcast
+    84: "StrikeZone",        # Statcast - Strike Zone Breakdown
+    85: "ShadowZone",        # Statcast - Shadow Zone Breakdown
+}
+FG_SPLIT_HANDS = {"l": "vs LHP", "r": "vs RHP"}   # lowercase L and R, per &throws=
+
+FG_SPLIT_SHARED = ["PlayerId", "MLBAMID", "Name", "NameASCII", "Season"]
+FG_SPLIT_ID = "PlayerId"
+FG_COMBINED_NAME = "FanGraphs Splits Combined"
+
+for _hand, _hlabel in FG_SPLIT_HANDS.items():
+    for _sg, _tlabel in FG_SPLIT_TABLES.items():
+        URLS_TO_DOWNLOAD[f"FG Split_{_tlabel}_{_hlabel}"] = FG_SPLITS_TEMPLATE.format(
+            hand=_hand, statgroup=_sg
+        )
+
 # --- 3. YAHOO CONFIGURATION ---
 YAHOO_HEADERS = {
     'cookie': 'gpp=DBAA; gpp_sid=-1; tbla_id=97aba7d9-c3ff-4473-b5af-27e4488364a9-tuct11351d07; F=d=8wVt2zo9vMP1POziYIT2lNjkZTe82g7NYW6pCXUNYjbcUEaK83AF; PH=l=en; Y=v=1&n=1famb46id26bu&l=mdcx300btsh5sjpten8tdldbm3a1csvbe4blis6i/o&p=02v000000000000&r=108&intl=us; axids=gam=y-6aBCK5ZG2uIPHx8d7vjlfPODI9qvgLxX.SVkBbidnXmpp7x2Uw---A&dv360=eS1LclpBc2pkRTJ1R2d4WmxfazRIV01ETjFJbExsM0RXUFVEdEZkempRaW1QdEZLdzByN0p3NVp4RGtRSEttTjN1c3Zac35B&ydsp=y-vyeMQKdE2uJIFgifZlWIkObe3tcj_7w5Gj3L2qwQZ.r16mEvBa5BB52HxNA5DYfpNyke~A&tbla=y-j.fSaT5G2uLB4tts_ons4WE05cJjwspXVLsRMcV0uYiLpb3rvg---A; ucs=tr=1787091329000; OTH=v=2&s=0&d=eyJraWQiOiIwIiwiYWxnIjoiUlMyNTYifQ.eyJjdSI6eyJndWlkIjoiSUlPN0s2TExZUlRYNFg1R0RQU1FaQzJUNkkiLCJwZXJzaXN0ZW50Ijp0cnVlLCJzaWQiOiJNeVRuazAyNEVBVGIifX0.fJrO5HvLM6kD_Xr38I6idfkJERQ97pjLtgvz0l3zwR47u3c4XmNC-c8a1zX1VqNqdDFbqa7DfYbkBpgjlzYApr9CNOPjm90jA42ay5Vw3oXzg0bZ9HDiUb5Unt-mxBnfNjZy9rhEuaBG72cOtZ83l84Yuj4Ahck-QVMH2wWc33Y; T=af=JnRzPTE3ODcwMDQ5NTAmcHM9NV9nbnptSTNKV2JLMElkSmhIdHEwUS0t&d=bnMBeWFob28BZwFJSU83SzZMTFlSVFg0WDVHRFBTUVpDMlQ2SQFhYwFBSUVzSWpPWgFhbAF5b3NlZnUxMjNAZ21haWwuY29tAXNjAWRlc2t0b3Bfd2ViAWZzAWxKSVNCX2RxVF92UgF6egFXZzRncUJBN0UBYQFRQUUBbGF0AVdnNGdxQgFudQEw&kt=EAAAanOv4F_0UNeEO2KMaTSnw--~I&ku=FAANwCaFkacgq6e8kkPu.c8oOcEvTRMljR2dDDqJCJnGqp8u6nGypQ0g5nZJZmNsO7S83HPANxbLtBVZ53mnyrTFXRKxEgTenFndO2o3jCqOO9mvCjJwnxZEy9zqehKYDgnxxxyZVx.Urfdq8geZsiTnh4EpvdZdgHVYLxye3ijhtg-~E; GUC=AQEACAJqhM1qukId3gSm&s=AQAAANTW5Oyl&g=aoOIIQ; A1=d=AQABBD9zO2oCEHwi-fLeXPRkjWfQOkPRPjMFEgEACALNhGq6atxH0iMA_eMDAAcIP3M7akPRPjMID5e_d66hgBKIZBI0MQRRoQkBBwoBRQ&S=AQAAAgcjphncHu3v5RZ45X8_XMA; A3=d=AQABBD9zO2oCEHwi-fLeXPRkjWfQOkPRPjMFEgEACALNhGq6atxH0iMA_eMDAAcIP3M7akPRPjMID5e_d66hgBKIZBI0MQRRoQkBBwoBRQ&S=AQAAAgcjphncHu3v5RZ45X8_XMA; cmp=t=1787530388&j=0&u=1YNN; gpp=DBAA; gpp_sid=-1; connectId=%7B%22puid%22%3A%226d5e962eff95794e9948fb5b76aaffca9b94a0c2e9a8ee0f7adfb852677eb8cb%22%2C%22vmuid%22%3A%22a35h6QA_9M-or2viYAYNpsTaXMjIfWih8oVgbYptn5U9JN_vuZjkolGraqMZeAcpoo_NdN7FQBNkLk19XT7KgA%22%2C%22connectid%22%3A%22a35h6QA_9M-or2viYAYNpsTaXMjIfWih8oVgbYptn5U9JN_vuZjkolGraqMZeAcpoo_NdN7FQBNkLk19XT7KgA%22%2C%22connectId%22%3A%22a35h6QA_9M-or2viYAYNpsTaXMjIfWih8oVgbYptn5U9JN_vuZjkolGraqMZeAcpoo_NdN7FQBNkLk19XT7KgA%22%2C%22ttl%22%3A86400000%2C%22lastSynced%22%3A1787530388610%2C%22lastUsed%22%3A1787530388610%7D; ySID=v=1&d=7CXPiM0r8A--; _ga=GA1.1.1024416356.1787530396; cids=eyJ0ZW1wVUlEcyI6eyJhbWF6b24iOnsidWlkIjoiQV9tNXlUbERTbkcwZ20tazJKQWlpUSIsImV4cGlyZXMiOiIyMDI2LTA5LTA3VDAxOjQ3OjA5LjI1NDcxNTIxOFoifX19; SPT=d=n8xh0G9CMwgzwwwmRSXGZxpiffVXcxdBzste6PhUe2wsegIWD92jM9oEpNgq8CZn1mwcFHi2hIx0glDzSPUZNgelJAJUkOmnzmFpJ1rqQBSS5j9hr2Qx9pA-&v=1; SPTB=d=TLPT7VNCMwhCC5SFgkFrpCfXZShCEmNa9lL.ru1ZJHD4X0oRxSswUfmNDYZUDIxWv0lhvbaCYd2X2VPVNuE7YL5BrmpNYQ2OZ4rXKdH2KA4-&v=1; A1S=d=AQABBD9zO2oCEHwi-fLeXPRkjWfQOkPRPjMFEgEACALNhGq6atxH0iMA_eMDAAcIP3M7akPRPjMID5e_d66hgBKIZBI0MQRRoQkBBwoBRQ&S=AQAAAgcjphncHu3v5RZ45X8_XMA; _ga_8CSZHGJ8KX=GS2.1.s1787539432$o2$g1$t1787539440$j52$l0$h0',
@@ -174,6 +204,103 @@ def scrape_yahoo_data(pos_code, tab_name):
         print(f"  -> Most likely cause: the Yahoo cookie in YAHOO_HEADERS has expired.")
         return False
 
+
+def _find_col(df, target):
+    """Find a column by NAME, case-insensitively. Never by position - the split
+    tables have different widths so PlayerId is not always in the same column."""
+    for c in df.columns:
+        if str(c).strip().lower() == target.lower():
+            return c
+    return None
+
+
+def _same_values(a, b):
+    """True if two aligned series hold the same values. Compares numerically where
+    possible so 448 and 448.0 are not mistaken for different (an outer join turns
+    int columns into floats)."""
+    an = pd.to_numeric(a, errors="coerce")
+    bn = pd.to_numeric(b, errors="coerce")
+    if an.notna().any() or bn.notna().any():
+        both_nan = an.isna() & bn.isna()
+        close = (an - bn).abs() < 1e-9
+        return bool((close | both_nan).all())
+    sa = a.astype(str).str.strip().fillna("")
+    sb = b.astype(str).str.strip().fillna("")
+    return bool(sa.eq(sb).all())
+
+
+def build_fangraphs_splits_combined():
+    """Join every downloaded FanGraphs split table into one wide CSV on PlayerId.
+
+    Stat columns are suffixed with handedness (e.g. 'SwStr%_vsLHP'). The table name
+    is only added when two tables share a stat name AND the values differ, so the
+    output stays readable while every column name remains unique - which is what
+    the Excel lookups require.
+    """
+    combined = None
+    for hand, hlabel in FG_SPLIT_HANDS.items():
+        hshort = hlabel.replace(" ", "")
+        for _sg, tlabel in FG_SPLIT_TABLES.items():
+            name = f"FG Split_{tlabel}_{hlabel}"
+            path = os.path.join(DOWNLOAD_DIR, f"{name}.csv")
+            if not os.path.exists(path):
+                print(f"  -> Combine: skipping {name} (file not present)")
+                continue
+            try:
+                df = pd.read_csv(path)
+            except Exception as e:
+                print(f"  -> Combine: could not read {name}: {e}")
+                continue
+
+            id_col = _find_col(df, FG_SPLIT_ID)
+            if id_col is None:
+                print(f"  -> Combine: {name} has no {FG_SPLIT_ID} column, skipping")
+                continue
+
+            df = df.dropna(subset=[id_col])
+            df[id_col] = df[id_col].astype(float).astype(int)
+            df = df.drop_duplicates(subset=[id_col])
+
+            shared_here = [c for c in df.columns
+                           if str(c).strip().lower() in [x.lower() for x in FG_SPLIT_SHARED]]
+
+            if combined is None:
+                combined = df[shared_here].rename(columns={id_col: FG_SPLIT_ID}).copy()
+
+            stat_cols = [c for c in df.columns if c not in shared_here]
+            keep, rename = [], {}
+            for c in stat_cols:
+                candidate = f"{c}_{hshort}"
+                if candidate in combined.columns:
+                    left = combined.set_index(FG_SPLIT_ID)[candidate]
+                    right = df.set_index(id_col)[c]
+                    if _same_values(left.reindex(right.index), right):
+                        continue
+                    candidate = f"{c}_{tlabel}_{hshort}"
+                keep.append(c)
+                rename[c] = candidate
+
+            if not keep:
+                continue
+
+            piece = df[[id_col] + keep].rename(columns=rename)
+            piece = piece.rename(columns={id_col: FG_SPLIT_ID})
+            combined = combined.merge(piece, on=FG_SPLIT_ID, how="outer")
+
+    if combined is None or combined.empty:
+        print("  -> Combine: no FanGraphs split files were available.")
+        return False
+
+    front = [c for c in FG_SPLIT_SHARED if c in combined.columns]
+    combined = combined[front + [c for c in combined.columns if c not in front]]
+    if "Name" in combined.columns:
+        combined = combined.sort_values("Name", na_position="last")
+
+    out_path = os.path.join(DOWNLOAD_DIR, f"{FG_COMBINED_NAME}.csv")
+    combined.to_csv(out_path, index=False)
+    print(f"  -> Combined FanGraphs splits: {len(combined)} players x {len(combined.columns)} columns")
+    return True
+
 def download_and_rename():
     # Force the server to use Eastern Time
     tz_ny = zoneinfo.ZoneInfo("America/New_York")
@@ -273,7 +400,19 @@ def download_and_rename():
             failed_sources.append(tab_name)
 
     driver.quit()
-    
+
+    # --- COMBINE THE FANGRAPHS SPLIT TABLES INTO ONE FILE ---
+    print("")
+    print("Combining FanGraphs split tables on PlayerId...")
+    try:
+        if build_fangraphs_splits_combined():
+            registry.append({'Tab Name': FG_COMBINED_NAME, 'Last Updated': formatted_pull_time})
+        else:
+            failed_sources.append(FG_COMBINED_NAME)
+    except Exception as e:
+        print(f"  -> Error combining FanGraphs splits: {e}")
+        failed_sources.append(FG_COMBINED_NAME)
+
     df_registry = pd.DataFrame(registry)
     df_registry.to_csv(os.path.join(DOWNLOAD_DIR, "Last_Updated.csv"), index=False)
     print("\n  -> Generated master timestamp file: Last_Updated.csv")
@@ -283,7 +422,7 @@ def download_and_rename():
     # committed. This block only decides whether the run is reported as a
     # failure, so a silently-broken source turns the GitHub run red instead
     # of green.
-    total_sources = 2 + len(URLS_TO_DOWNLOAD)
+    total_sources = 2 + len(URLS_TO_DOWNLOAD) + 1  # +1 for the combined splits file
     print("\n" + "=" * 50)
     print(f"RUN SUMMARY: {total_sources - len(failed_sources)} of {total_sources} sources updated successfully.")
 
