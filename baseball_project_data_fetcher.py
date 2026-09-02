@@ -61,7 +61,10 @@ FG_SPLIT_HANDS = {"l": "vs LHP", "r": "vs RHP"}   # lowercase L and R, per &thro
 
 FG_SPLIT_SHARED = ["PlayerId", "MLBAMID", "Name", "NameASCII", "Season"]
 FG_SPLIT_ID = "PlayerId"
-FG_COMBINED_NAME = "FanGraphs Splits Combined"
+FG_COMBINED_NAMES = {
+    "l": "FanGraphs Splits Combined_vs LHP",
+    "r": "FanGraphs Splits Combined_vs RHP",
+}
 
 for _hand, _hlabel in FG_SPLIT_HANDS.items():
     for _sg, _tlabel in FG_SPLIT_TABLES.items():
@@ -230,16 +233,18 @@ def _same_values(a, b):
 
 
 def build_fangraphs_splits_combined():
-    """Join every downloaded FanGraphs split table into one wide CSV on PlayerId.
+    """Merge the FanGraphs split tables into ONE FILE PER HANDEDNESS.
 
-    Stat columns are suffixed with handedness (e.g. 'SwStr%_vsLHP'). The table name
-    is only added when two tables share a stat name AND the values differ, so the
-    output stays readable while every column name remains unique - which is what
-    the Excel lookups require.
+    Column headers are left exactly as FanGraphs exports them - no suffixes - so the
+    workbook's own row-1 renaming stays in control. The handedness is carried by the
+    file (and therefore the Excel tab), not by the column name, which matches how the
+    Savant vs RHP / vs LHP tabs already work.
+
+    Returns the list of output names that were written successfully.
     """
-    combined = None
+    written = []
     for hand, hlabel in FG_SPLIT_HANDS.items():
-        hshort = hlabel.replace(" ", "")
+        combined = None
         for _sg, tlabel in FG_SPLIT_TABLES.items():
             name = f"FG Split_{tlabel}_{hlabel}"
             path = os.path.join(DOWNLOAD_DIR, f"{name}.csv")
@@ -270,13 +275,14 @@ def build_fangraphs_splits_combined():
             stat_cols = [c for c in df.columns if c not in shared_here]
             keep, rename = [], {}
             for c in stat_cols:
-                candidate = f"{c}_{hshort}"
+                candidate = c                      # keep the exported header untouched
                 if candidate in combined.columns:
                     left = combined.set_index(FG_SPLIT_ID)[candidate]
                     right = df.set_index(id_col)[c]
                     if _same_values(left.reindex(right.index), right):
-                        continue
-                    candidate = f"{c}_{tlabel}_{hshort}"
+                        continue                   # identical duplicate -> drop it
+                    candidate = f"{c}_{tlabel}"    # values differ -> must disambiguate
+                    print(f"  -> Combine: '{c}' differs between tables, kept as '{candidate}'")
                 keep.append(c)
                 rename[c] = candidate
 
@@ -287,19 +293,22 @@ def build_fangraphs_splits_combined():
             piece = piece.rename(columns={id_col: FG_SPLIT_ID})
             combined = combined.merge(piece, on=FG_SPLIT_ID, how="outer")
 
-    if combined is None or combined.empty:
-        print("  -> Combine: no FanGraphs split files were available.")
-        return False
+        if combined is None or combined.empty:
+            print(f"  -> Combine: no split files available for {hlabel}.")
+            continue
 
-    front = [c for c in FG_SPLIT_SHARED if c in combined.columns]
-    combined = combined[front + [c for c in combined.columns if c not in front]]
-    if "Name" in combined.columns:
-        combined = combined.sort_values("Name", na_position="last")
+        front = [c for c in FG_SPLIT_SHARED if c in combined.columns]
+        combined = combined[front + [c for c in combined.columns if c not in front]]
+        if "Name" in combined.columns:
+            combined = combined.sort_values("Name", na_position="last")
 
-    out_path = os.path.join(DOWNLOAD_DIR, f"{FG_COMBINED_NAME}.csv")
-    combined.to_csv(out_path, index=False)
-    print(f"  -> Combined FanGraphs splits: {len(combined)} players x {len(combined.columns)} columns")
-    return True
+        out_name = FG_COMBINED_NAMES[hand]
+        combined.to_csv(os.path.join(DOWNLOAD_DIR, f"{out_name}.csv"), index=False)
+        print(f"  -> {out_name}: {len(combined)} players x {len(combined.columns)} columns")
+        written.append(out_name)
+
+    return written
+
 
 def download_and_rename():
     # Force the server to use Eastern Time
@@ -405,13 +414,16 @@ def download_and_rename():
     print("")
     print("Combining FanGraphs split tables on PlayerId...")
     try:
-        if build_fangraphs_splits_combined():
-            registry.append({'Tab Name': FG_COMBINED_NAME, 'Last Updated': formatted_pull_time})
-        else:
-            failed_sources.append(FG_COMBINED_NAME)
+        written = build_fangraphs_splits_combined()
+        for _out in FG_COMBINED_NAMES.values():
+            if _out in written:
+                registry.append({'Tab Name': _out, 'Last Updated': formatted_pull_time})
+            else:
+                failed_sources.append(_out)
     except Exception as e:
         print(f"  -> Error combining FanGraphs splits: {e}")
-        failed_sources.append(FG_COMBINED_NAME)
+        for _out in FG_COMBINED_NAMES.values():
+            failed_sources.append(_out)
 
     df_registry = pd.DataFrame(registry)
     df_registry.to_csv(os.path.join(DOWNLOAD_DIR, "Last_Updated.csv"), index=False)
@@ -422,7 +434,7 @@ def download_and_rename():
     # committed. This block only decides whether the run is reported as a
     # failure, so a silently-broken source turns the GitHub run red instead
     # of green.
-    total_sources = 2 + len(URLS_TO_DOWNLOAD) + 1  # +1 for the combined splits file
+    total_sources = 2 + len(URLS_TO_DOWNLOAD) + len(FG_COMBINED_NAMES)
     print("\n" + "=" * 50)
     print(f"RUN SUMMARY: {total_sources - len(failed_sources)} of {total_sources} sources updated successfully.")
 
