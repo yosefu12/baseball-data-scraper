@@ -1,0 +1,48 @@
+name: FanGraphs 2025 Backfill
+
+# MANUAL ONLY - there is deliberately no schedule here. This workflow exists to
+# pull the 2025 FanGraphs split tables once, into data_2025_final/. It does not
+# touch data/ and it does not affect the daily "Baseball Data Scraper" run.
+# Once the 2025 CSVs have been collected, this file and backfill_2025.py can
+# both be deleted.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pandas beautifulsoup4 lxml selenium webdriver-manager
+
+      - name: Run backfill script
+        env:
+          FANGRAPHS_COOKIE: ${{ secrets.FANGRAPHS_COOKIE }}
+        run: python backfill_2025.py
+
+      - name: Commit and Push 2025 files
+        # always() so that partial results are still committed if one table fails.
+        # Only data_2025_final/ is staged - data/ is never touched by this job.
+        if: always()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global rebase.autoStash true
+          git add -A data_2025_final/
+          git commit -m "FanGraphs 2025 final split data" || echo "No changes to commit"
+          git pull --rebase -X theirs
+          git push
