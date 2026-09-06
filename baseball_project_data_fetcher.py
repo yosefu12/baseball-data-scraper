@@ -70,6 +70,39 @@ for _hand, _hlabel in FG_SPLIT_HANDS.items():
             hand=_hand, statgroup=_sg
         )
 
+# --- FanGraphs SPLITS LEADERBOARDS (season-level splits) ---------------------
+# pitch-type-splits computes batted-ball rates over the pitch subset it is
+# filtered to, which is NOT a hitter's season batted-ball profile vs LHP/RHP
+# (its FB% ran ~4 points below the season figure for 92% of hitters). The
+# Splits Leaderboards "Batted Ball" preset is the correct source, and it also
+# carries Pull%/Cent%/Oppo%, Soft%/Med%/Hard%, GB/FB, IFH% and BUH%, which
+# pitch-type-splits does not have at all.
+FG_SL_TEMPLATE = (
+    "https://www.fangraphs.com/leaders/splits-leaderboards"
+    "?position=B&splitArr={split}&autoPt=false&statgroup={statgroup}"
+    "&startDate=2026-03-01&endDate=2026-11-30"
+)
+# statgroup values read out of the splits-leaderboards JS bundle:
+# 1 Standard, 2 Advanced, 3 Batted Ball, 30 Statcast, 80 Bat Tracking.
+FG_SL_TABLES = {3: "BattedBallSeason"}
+FG_SL_SPLIT_ARR = {"l": 1, "r": 2}      # splitArr 1 = vs LHP, 2 = vs RHP
+
+for _hand, _hlabel in FG_SPLIT_HANDS.items():
+    for _sg, _tlabel in FG_SL_TABLES.items():
+        URLS_TO_DOWNLOAD[f"FG SL_{_tlabel}_{_hlabel}"] = FG_SL_TEMPLATE.format(
+            split=FG_SL_SPLIT_ARR[_hand], statgroup=_sg
+        )
+
+# Merge order decides which table keeps the PLAIN column name: the first table
+# to supply a stat wins, and a later table whose values differ gets the table
+# name appended. The season split table is listed first so GB%/FB%/LD%/IFFB%/
+# HR-FB are the correct season figures; the pitch-type versions land as
+# 'GB%_BattedBall' etc. rather than being silently dropped.
+FG_MERGE_ORDER = (
+    [("FG SL", _t) for _t in FG_SL_TABLES.values()] +
+    [("FG Split", _t) for _t in FG_SPLIT_TABLES.values()]
+)
+
 # --- 3. YAHOO CONFIGURATION ---
 YAHOO_HEADERS = {
     'cookie': 'gpp=DBAA; gpp_sid=-1; tbla_id=97aba7d9-c3ff-4473-b5af-27e4488364a9-tuct11351d07; F=d=8wVt2zo9vMP1POziYIT2lNjkZTe82g7NYW6pCXUNYjbcUEaK83AF; PH=l=en; Y=v=1&n=1famb46id26bu&l=mdcx300btsh5sjpten8tdldbm3a1csvbe4blis6i/o&p=02v000000000000&r=108&intl=us; axids=gam=y-6aBCK5ZG2uIPHx8d7vjlfPODI9qvgLxX.SVkBbidnXmpp7x2Uw---A&dv360=eS1LclpBc2pkRTJ1R2d4WmxfazRIV01ETjFJbExsM0RXUFVEdEZkempRaW1QdEZLdzByN0p3NVp4RGtRSEttTjN1c3Zac35B&ydsp=y-vyeMQKdE2uJIFgifZlWIkObe3tcj_7w5Gj3L2qwQZ.r16mEvBa5BB52HxNA5DYfpNyke~A&tbla=y-j.fSaT5G2uLB4tts_ons4WE05cJjwspXVLsRMcV0uYiLpb3rvg---A; ucs=tr=1787091329000; OTH=v=2&s=0&d=eyJraWQiOiIwIiwiYWxnIjoiUlMyNTYifQ.eyJjdSI6eyJndWlkIjoiSUlPN0s2TExZUlRYNFg1R0RQU1FaQzJUNkkiLCJwZXJzaXN0ZW50Ijp0cnVlLCJzaWQiOiJNeVRuazAyNEVBVGIifX0.fJrO5HvLM6kD_Xr38I6idfkJERQ97pjLtgvz0l3zwR47u3c4XmNC-c8a1zX1VqNqdDFbqa7DfYbkBpgjlzYApr9CNOPjm90jA42ay5Vw3oXzg0bZ9HDiUb5Unt-mxBnfNjZy9rhEuaBG72cOtZ83l84Yuj4Ahck-QVMH2wWc33Y; T=af=JnRzPTE3ODcwMDQ5NTAmcHM9NV9nbnptSTNKV2JLMElkSmhIdHEwUS0t&d=bnMBeWFob28BZwFJSU83SzZMTFlSVFg0WDVHRFBTUVpDMlQ2SQFhYwFBSUVzSWpPWgFhbAF5b3NlZnUxMjNAZ21haWwuY29tAXNjAWRlc2t0b3Bfd2ViAWZzAWxKSVNCX2RxVF92UgF6egFXZzRncUJBN0UBYQFRQUUBbGF0AVdnNGdxQgFudQEw&kt=EAAAanOv4F_0UNeEO2KMaTSnw--~I&ku=FAANwCaFkacgq6e8kkPu.c8oOcEvTRMljR2dDDqJCJnGqp8u6nGypQ0g5nZJZmNsO7S83HPANxbLtBVZ53mnyrTFXRKxEgTenFndO2o3jCqOO9mvCjJwnxZEy9zqehKYDgnxxxyZVx.Urfdq8geZsiTnh4EpvdZdgHVYLxye3ijhtg-~E; GUC=AQEACAJqhM1qukId3gSm&s=AQAAANTW5Oyl&g=aoOIIQ; A1=d=AQABBD9zO2oCEHwi-fLeXPRkjWfQOkPRPjMFEgEACALNhGq6atxH0iMA_eMDAAcIP3M7akPRPjMID5e_d66hgBKIZBI0MQRRoQkBBwoBRQ&S=AQAAAgcjphncHu3v5RZ45X8_XMA; A3=d=AQABBD9zO2oCEHwi-fLeXPRkjWfQOkPRPjMFEgEACALNhGq6atxH0iMA_eMDAAcIP3M7akPRPjMID5e_d66hgBKIZBI0MQRRoQkBBwoBRQ&S=AQAAAgcjphncHu3v5RZ45X8_XMA; cmp=t=1787530388&j=0&u=1YNN; gpp=DBAA; gpp_sid=-1; connectId=%7B%22puid%22%3A%226d5e962eff95794e9948fb5b76aaffca9b94a0c2e9a8ee0f7adfb852677eb8cb%22%2C%22vmuid%22%3A%22a35h6QA_9M-or2viYAYNpsTaXMjIfWih8oVgbYptn5U9JN_vuZjkolGraqMZeAcpoo_NdN7FQBNkLk19XT7KgA%22%2C%22connectid%22%3A%22a35h6QA_9M-or2viYAYNpsTaXMjIfWih8oVgbYptn5U9JN_vuZjkolGraqMZeAcpoo_NdN7FQBNkLk19XT7KgA%22%2C%22connectId%22%3A%22a35h6QA_9M-or2viYAYNpsTaXMjIfWih8oVgbYptn5U9JN_vuZjkolGraqMZeAcpoo_NdN7FQBNkLk19XT7KgA%22%2C%22ttl%22%3A86400000%2C%22lastSynced%22%3A1787530388610%2C%22lastUsed%22%3A1787530388610%7D; ySID=v=1&d=7CXPiM0r8A--; _ga=GA1.1.1024416356.1787530396; cids=eyJ0ZW1wVUlEcyI6eyJhbWF6b24iOnsidWlkIjoiQV9tNXlUbERTbkcwZ20tazJKQWlpUSIsImV4cGlyZXMiOiIyMDI2LTA5LTA3VDAxOjQ3OjA5LjI1NDcxNTIxOFoifX19; SPT=d=n8xh0G9CMwgzwwwmRSXGZxpiffVXcxdBzste6PhUe2wsegIWD92jM9oEpNgq8CZn1mwcFHi2hIx0glDzSPUZNgelJAJUkOmnzmFpJ1rqQBSS5j9hr2Qx9pA-&v=1; SPTB=d=TLPT7VNCMwhCC5SFgkFrpCfXZShCEmNa9lL.ru1ZJHD4X0oRxSswUfmNDYZUDIxWv0lhvbaCYd2X2VPVNuE7YL5BrmpNYQ2OZ4rXKdH2KA4-&v=1; A1S=d=AQABBD9zO2oCEHwi-fLeXPRkjWfQOkPRPjMFEgEACALNhGq6atxH0iMA_eMDAAcIP3M7akPRPjMID5e_d66hgBKIZBI0MQRRoQkBBwoBRQ&S=AQAAAgcjphncHu3v5RZ45X8_XMA; _ga_8CSZHGJ8KX=GS2.1.s1787539432$o2$g1$t1787539440$j52$l0$h0',
@@ -243,8 +276,8 @@ def build_fangraphs_splits_combined():
     written = []
     for hand, hlabel in FG_SPLIT_HANDS.items():
         combined = None
-        for _sg, tlabel in FG_SPLIT_TABLES.items():
-            name = f"FG Split_{tlabel}_{hlabel}"
+        for prefix, tlabel in FG_MERGE_ORDER:
+            name = f"{prefix}_{tlabel}_{hlabel}"
             path = os.path.join(DOWNLOAD_DIR, f"{name}.csv")
             if not os.path.exists(path):
                 print(f"  -> Combine: skipping {name} (file not present)")
