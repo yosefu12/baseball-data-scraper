@@ -44,8 +44,17 @@ bp.FG_COMBINED_NAMES = {
 
 SPLITS_TEMPLATE_2025 = bp.FG_SPLITS_TEMPLATE.replace("season=2026", f"season={SEASON}")
 
+# splits-leaderboards has no season parameter - it is driven by a date range, so
+# this needs a different edit than the pitch-type template's season swap.
+SL_TEMPLATE_2025 = (bp.FG_SL_TEMPLATE
+                    .replace("startDate=2026-03-01", f"startDate={SEASON}-03-01")
+                    .replace("endDate=2026-11-30", f"endDate={SEASON}-11-30"))
+
 URLS = {}
 for _hand, _hlabel in bp.FG_SPLIT_HANDS.items():
+    for _sg, _tlabel in bp.FG_SL_TABLES.items():
+        URLS[f"FG SL_{_tlabel}_{_hlabel}"] = SL_TEMPLATE_2025.format(
+            split=bp.FG_SL_SPLIT_ARR[_hand], statgroup=_sg)
     for _sg, _tlabel in bp.FG_SPLIT_TABLES.items():
         URLS[f"FG Split_{_tlabel}_{_hlabel}"] = SPLITS_TEMPLATE_2025.format(
             hand=_hand, statgroup=_sg)
