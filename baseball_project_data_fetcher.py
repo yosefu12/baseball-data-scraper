@@ -58,6 +58,18 @@ FG_SPLIT_TABLES = {
 FG_SPLIT_HANDS = {"l": "vs LHP", "r": "vs RHP"}   # lowercase L and R, per &throws=
 
 FG_SPLIT_SHARED = ["PlayerId", "MLBAMID", "Name", "NameASCII", "Season"]
+
+# lowercase header as exported -> the canonical name used in the combined file.
+# Keeps the identifier block identical no matter which FanGraphs tool the table
+# came from, so the Excel queries never see a renamed identifier column.
+FG_SPLIT_ALIASES = {
+    "playerid":        "PlayerId",
+    "mlbamid":         "MLBAMID",
+    "name":            "Name",
+    "nameascii":       "NameASCII",
+    "playernameascii": "NameASCII",
+    "season":          "Season",
+}
 FG_SPLIT_ID = "PlayerId"
 FG_COMBINED_NAMES = {
     "l": "FanGraphs Splits Combined_vs LHP",
@@ -287,6 +299,18 @@ def build_fangraphs_splits_combined():
             except Exception as e:
                 print(f"  -> Combine: could not read {name}: {e}")
                 continue
+
+            # Different FanGraphs tools spell the identifier columns differently
+            # (splits-leaderboards exports 'playerId' and 'playerNameASCII',
+            # pitch-type-splits exports 'PlayerId' and 'NameASCII'). Normalise
+            # them so the identifiers stay a single, consistently-named block -
+            # otherwise 'playerNameASCII' is treated as a stat and the Excel
+            # queries that reference 'NameASCII' break.
+            df = df.rename(columns={
+                c: FG_SPLIT_ALIASES[str(c).strip().lower()]
+                for c in df.columns
+                if str(c).strip().lower() in FG_SPLIT_ALIASES
+            })
 
             id_col = _find_col(df, FG_SPLIT_ID)
             if id_col is None:
