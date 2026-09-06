@@ -39,6 +39,31 @@ URLS_TO_DOWNLOAD = {
 
 # --- 2b. FANGRAPHS PITCH-TYPE SPLITS (5 tables x 2 handedness) ---
 # One template drives all ten downloads, so changing the season is a single edit.
+# --- SAVANT BATTED BALL PROFILE ------------------------------------------
+# Downloaded separately, then merged INTO the matching Savant_BatTrack file on
+# the MLBAM player id, so the workbook gets these columns on the BatTrack tabs
+# it already has instead of needing three new tabs.
+SAVANT_BB_TEMPLATE = (
+    "https://baseballsavant.mlb.com/leaderboard/batted-ball"
+    "?type=batter&season%5B%5D=2026&splitYear=1&min=1&minSplit=1"
+    "&gameType%5B%5D=R&dateStart=&dateEnd=&batSide=&pitchHand={hand}"
+)
+# raw download name -> the BatTrack file its columns get merged into
+SAVANT_BB_TARGETS = {
+    "Savant_BattedBall_All": "Savant_BatTrack_All",
+    "Savant_BattedBall_LHP": "Savant_BatTrack_LHP",
+    "Savant_BattedBall_RHP": "Savant_BatTrack_RHP",
+}
+SAVANT_BB_HANDS = {"Savant_BattedBall_All": "",
+                   "Savant_BattedBall_LHP": "L",
+                   "Savant_BattedBall_RHP": "R"}
+# Savant is not consistent about what it calls the MLBAM id across exports.
+SAVANT_ID_CANDIDATES = ["id", "player_id", "playerid", "mlbam_id", "mlbamid",
+                        "mlb_id", "entity_id", "batter"]
+
+for _bbname, _bbhand in SAVANT_BB_HANDS.items():
+    URLS_TO_DOWNLOAD[_bbname] = SAVANT_BB_TEMPLATE.format(hand=_bbhand)
+
 FG_SPLITS_TEMPLATE = (
     "https://www.fangraphs.com/leaders/pitch-type-splits"
     "?season=2026&startdate=&enddate=&pitchtype=&position=bat&stands=&throws={hand}"
@@ -275,6 +300,69 @@ def _same_values(a, b):
     return bool(sa.eq(sb).all())
 
 
+def merge_savant_batted_ball():
+    """Add the Savant batted ball profile columns onto the BatTrack files.
+
+    Joined on the MLBAM player id, LEFT from BatTrack, so the BatTrack files keep
+    exactly the rows (and therefore the Excel row count) they had before - this
+    only widens them. Every step is guarded: if a batted ball download failed or
+    an id column cannot be found, the BatTrack file is left untouched rather than
+    being written out half-merged.
+    """
+    for bb_name, track_name in SAVANT_BB_TARGETS.items():
+        bb_path = os.path.join(DOWNLOAD_DIR, f"{bb_name}.csv")
+        track_path = os.path.join(DOWNLOAD_DIR, f"{track_name}.csv")
+
+        if not os.path.exists(bb_path) or not os.path.exists(track_path):
+            print(f"  -> Savant BB: skipping {track_name} (a source file is missing)")
+            continue
+
+        try:
+            bb = pd.read_csv(bb_path)
+            track = pd.read_csv(track_path)
+        except Exception as e:
+            print(f"  -> Savant BB: could not read files for {track_name}: {e}")
+            continue
+
+        bb_id = next((_find_col(bb, c) for c in SAVANT_ID_CANDIDATES
+                      if _find_col(bb, c) is not None), None)
+        track_id = next((_find_col(track, c) for c in SAVANT_ID_CANDIDATES
+                         if _find_col(track, c) is not None), None)
+        if bb_id is None or track_id is None:
+            print(f"  -> Savant BB: no MLBAM id column found for {track_name}, skipping")
+            print(f"     batted ball columns were: {list(bb.columns)}")
+            continue
+
+        try:
+            bb = bb.dropna(subset=[bb_id]).copy()
+            bb[bb_id] = bb[bb_id].astype(float).astype(int)
+            bb = bb.drop_duplicates(subset=[bb_id])
+            track = track.copy()
+            track[track_id] = track[track_id].astype(float).astype(int)
+
+            # Only bring over columns the BatTrack file does not already have,
+            # so nothing existing is overwritten and no name is duplicated.
+            new_cols = [c for c in bb.columns
+                        if c != bb_id and str(c).strip().lower()
+                        not in [str(t).strip().lower() for t in track.columns]]
+            if not new_cols:
+                print(f"  -> Savant BB: {track_name} already has every batted ball column")
+                continue
+
+            piece = bb[[bb_id] + new_cols].rename(columns={bb_id: track_id})
+            before = len(track.columns)
+            merged = track.merge(piece, on=track_id, how="left")
+
+            unmatched = len(bb) - bb[bb_id].isin(track[track_id]).sum()
+            merged.to_csv(track_path, index=False)
+            print(f"  -> {track_name}: {len(merged)} rows, "
+                  f"{before} -> {len(merged.columns)} columns "
+                  f"(+{len(new_cols)} batted ball stats, "
+                  f"{unmatched} batted ball players had no BatTrack row)")
+        except Exception as e:
+            print(f"  -> Savant BB: merge failed for {track_name}, left unchanged: {e}")
+
+
 def build_fangraphs_splits_combined():
     """Merge the FanGraphs split tables into ONE FILE PER HANDEDNESS.
 
@@ -464,6 +552,11 @@ def download_and_rename():
             failed_sources.append(tab_name)
 
     driver.quit()
+
+    # --- MERGE THE SAVANT BATTED BALL PROFILE INTO THE BATTRACK FILES ---
+    print("")
+    print("Merging Savant batted ball profile into the BatTrack files on MLBAM id...")
+    merge_savant_batted_ball()
 
     # --- COMBINE THE FANGRAPHS SPLIT TABLES INTO ONE FILE ---
     print("")
